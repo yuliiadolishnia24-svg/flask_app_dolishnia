@@ -1,0 +1,12 @@
+body {
+    font-family: Arial, sans-serif;
+}
+
+section {
+    margin-bottom: 40px;
+}
+
+img.img-thumbnail {
+    max-width: 200px;
+    height: auto;
+}
