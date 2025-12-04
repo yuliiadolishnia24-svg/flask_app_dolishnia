@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% from "_macros.html" import render_field %}
+
+{% block title %}Contact Form{% endblock %}
+
+{% block content %}
+<h1>Contact Form</h1>
+<form method="post">
+    {{ form.hidden_tag() }}  {# CSRF token #}
+    {{ render_field(form.name) }}
+    {{ render_field(form.email) }}
+    {{ render_field(form.phone) }}
+    {{ render_field(form.subject) }}
+    {{ render_field(form.message) }}
+    {{ form.submit(class="btn btn-primary") }}
+</form>
+{% endblock %}
