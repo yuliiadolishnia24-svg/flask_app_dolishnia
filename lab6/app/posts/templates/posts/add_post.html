@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block title %}{{ title or "Add Post" }}{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1>{{ title or "Add Post" }}</h1>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <ul>
+          {% for category, message in messages %}
+            <li class="{{ category }}">{{ message }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+
+    <form method="POST">
+        {{ form.hidden_tag() }}
+        <div class="mb-3">
+            {{ form.title.label }}<br>
+            {{ form.title(size=50, class_="form-control") }}
+        </div>
+        <div class="mb-3">
+            {{ form.content.label }}<br>
+            {{ form.content(rows=5, cols=40, class_="form-control") }}
+        </div>
+        <div class="mb-3 form-check">
+            {{ form.is_active(class_="form-check-input") }}
+            {{ form.is_active.label(class_="form-check-label") }}
+        </div>
+        <div class="mb-3">
+            {{ form.publish_date.label }}<br>
+            {{ form.publish_date(class_="form-control") }}
+        </div>
+        <div class="mb-3">
+            {{ form.category.label }}<br>
+            {{ form.category(class_="form-control") }}
+        </div>
+        <p>{{ form.submit(class_="btn btn-primary") }}</p>
+    </form>
+
+    <a href="{{ url_for('posts.all_posts') }}" class="btn btn-secondary">Back to all posts</a>
+</div>
+{% endblock %}

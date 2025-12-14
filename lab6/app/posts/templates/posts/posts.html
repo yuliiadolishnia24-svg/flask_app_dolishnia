@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %}All Posts{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="myclass">Articles</h1>
+
+    <!-- Кнопка для додавання нового поста -->
+    <p><a href="{{ url_for('posts.create_post') }}" class="btn btn-primary mb-3">Add post</a></p>
+
+    <div class="row">
+        {% for post in posts %}
+        <div class="col-md-3 mb-4">
+            <div class="card h-100">
+                <img src="{{ url_for('static', filename='img/default.jpg') }}" class="card-img-top" height="150px">
+                <div class="card-body">
+                    <h5 class="card-title">{{ post.title }}</h5>
+                    <p class="card-text">Category: {{ post.category or "None" }}</p>
+                    <p class="card-text">{{ post.content[:100] }}</p>
+                    <a href="{{ url_for('posts.detail_post', id=post.id) }}" class="btn btn-sm btn-info">View Post</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

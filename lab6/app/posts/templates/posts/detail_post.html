@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block title %}{{ post.title }}{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1>{{ post.title }}</h1>
+
+    <p>{{ post.content }}</p>
+    <p>Author: {{ post.author or "Anonymous" }}</p>
+    <p>Published: {{ post.posted.strftime('%Y-%m-%d %H:%M') }}</p>
+    <p>Category: {{ post.category }}</p>
+
+    <a href="{{ url_for('posts.edit_post', id=post.id) }}" class="btn btn-warning">Edit</a>
+    <a href="{{ url_for('posts.delete_post', id=post.id) }}" class="btn btn-danger">Delete</a>
+    <a href="{{ url_for('posts.all_posts') }}" class="btn btn-secondary">Back to all posts</a>
+</div>
+{% endblock %}
