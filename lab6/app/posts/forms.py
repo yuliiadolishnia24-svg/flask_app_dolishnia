@@ -1,8 +1,9 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, TextAreaField, BooleanField, SelectField, SubmitField
+from wtforms import SelectMultipleField, StringField, TextAreaField, BooleanField, SelectField, SubmitField
 from wtforms.validators import DataRequired, Length
-from datetime import datetime
 from wtforms.fields import DateTimeLocalField
+from datetime import datetime
+from app.posts.models import Tag, User
 
 CATEGORIES = [
     ("news", "News"),
@@ -31,4 +32,15 @@ class PostForm(FlaskForm):
         choices=CATEGORIES,
         validators=[DataRequired()]
     )
+    author_id = SelectField("Author", coerce=int)
+    tags = SelectMultipleField("Tags", coerce=int)  # нове поле
+
+
     submit = SubmitField("Add Post")
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        from app.posts.models import User
+        # Завантажуємо користувачів із БД для вибору автора
+        self.author_id.choices = [(u.id, u.username) for u in User.query.order_by(User.id).all()]
+        self.tags.choices = [(t.id, t.name) for t in Tag.query.order_by(Tag.id).all()]

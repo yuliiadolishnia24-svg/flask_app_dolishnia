@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, request, redirect, session, url_for, flash, abort
 from app.extensions import db
-from app.posts.models import Post
+from app.posts.models import Post, User
 from app.posts.forms import PostForm
 
 posts_bp = Blueprint("posts", __name__, url_prefix="/post", template_folder='templates')
@@ -10,15 +10,22 @@ posts_bp = Blueprint("posts", __name__, url_prefix="/post", template_folder='tem
 def create_post():
     form = PostForm()
     if form.validate_on_submit():
-        author = session.get("user", "Anonymous")  # 🔹 додали автора
         post = Post(
             title=form.title.data,
             content=form.content.data,
-            author=author,
+            user_id=form.author_id.data,  # прив'язка до користувача
             is_active=form.is_active.data,
             posted=form.publish_date.data,
             category=form.category.data
+            
         )
+
+
+        # --- додавання тегів ---
+        from app.posts.models import Tag
+        selected_tags = Tag.query.filter(Tag.id.in_(form.tags.data)).all()
+        post.tags.extend(selected_tags)
+
         db.session.add(post)
         db.session.commit()
         flash(f"Post '{post.title}' has been added.", "success")
@@ -42,10 +49,11 @@ def detail_post(id):
 def edit_post(id):
     post = Post.query.get_or_404(id)
     form = PostForm(obj=post)
-    form.publish_date.data = post.posted  # дата не співпадає іменами
+    form.publish_date.data = post.posted
     if form.validate_on_submit():
         form.populate_obj(post)
-        post.posted = form.publish_date.data  # оновлюємо дату
+        post.posted = form.publish_date.data
+        post.user_id = form.author_id.data
         db.session.commit()
         flash("Post updated successfully!", "success")
         return redirect(url_for("posts.detail_post", id=post.id))

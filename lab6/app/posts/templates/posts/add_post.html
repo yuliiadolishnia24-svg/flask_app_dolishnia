@@ -38,6 +38,17 @@
             {{ form.category.label }}<br>
             {{ form.category(class_="form-control") }}
         </div>
+        <div class="mb-3">
+             {{ form.author_id.label }}<br>
+            {{ form.author_id(class_="form-control") }}
+        </div>
+        
+        <div class="mb-3">
+            {{ form.tags.label }}<br>
+            {{ form.tags(class_="form-control", multiple=True) }}
+        </div>
+
+
         <p>{{ form.submit(class_="btn btn-primary") }}</p>
     </form>
 

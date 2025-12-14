@@ -17,7 +17,10 @@
                 <div class="card-body">
                     <h5 class="card-title">{{ post.title }}</h5>
                     <p class="card-text">Category: {{ post.category or "None" }}</p>
+                    <p class="card-text">Author: {{ post.user.username if post.user else "Anonymous" }}</p>
                     <p class="card-text">{{ post.content[:100] }}</p>
+                    <p>Tags:{% for tag in post.tags %} <span class="badge bg-secondary">{{ tag.name }}</span> {% endfor %} </p>
+
                     <a href="{{ url_for('posts.detail_post', id=post.id) }}" class="btn btn-sm btn-info">View Post</a>
                 </div>
             </div>
